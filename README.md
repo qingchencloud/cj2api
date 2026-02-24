@@ -116,7 +116,7 @@ npm run deploy
 {
   "id": "chatcmpl-xxxx",
   "object": "chat.completion",
-  "created": 1700000000,
+  "created": 1740000000,
   "model": "llama3.1-8B",
   "choices": [
     {
@@ -138,11 +138,11 @@ npm run deploy
 当 `stream: true` 时，返回 `text/event-stream` 格式：
 
 ```
-data: {"id":"chatcmpl-xxxx","object":"chat.completion.chunk","created":1700000000,"model":"llama3.1-8B","choices":[{"index":0,"delta":{"role":"assistant","content":"你好"},"finish_reason":null}]}
+data: {"id":"chatcmpl-xxxx","object":"chat.completion.chunk","created":1740000000,"model":"llama3.1-8B","choices":[{"index":0,"delta":{"role":"assistant","content":"你好"},"finish_reason":null}]}
 
-data: {"id":"chatcmpl-xxxx","object":"chat.completion.chunk","created":1700000000,"model":"llama3.1-8B","choices":[{"index":0,"delta":{"content":"！"},"finish_reason":null}]}
+data: {"id":"chatcmpl-xxxx","object":"chat.completion.chunk","created":1740000000,"model":"llama3.1-8B","choices":[{"index":0,"delta":{"content":"！"},"finish_reason":null}]}
 
-data: {"id":"chatcmpl-xxxx","object":"chat.completion.chunk","created":1700000000,"model":"llama3.1-8B","choices":[{"index":0,"delta":{},"finish_reason":"stop"}],"usage":{"prompt_tokens":12,"completion_tokens":85,"total_tokens":97}}
+data: {"id":"chatcmpl-xxxx","object":"chat.completion.chunk","created":1740000000,"model":"llama3.1-8B","choices":[{"index":0,"delta":{},"finish_reason":"stop"}],"usage":{"prompt_tokens":12,"completion_tokens":85,"total_tokens":97}}
 
 data: [DONE]
 ```

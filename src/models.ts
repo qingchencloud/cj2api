@@ -7,7 +7,7 @@ export function handleModels(): Response {
       {
         id: DEFAULT_MODEL,
         object: 'model',
-        created: 1700000000,
+        created: 1740000000,
         owned_by: 'system',
         permission: [],
       },
