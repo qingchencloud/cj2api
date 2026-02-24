@@ -17,6 +17,7 @@ export function renderDemoPage(): string {
     .subtitle{color:#666;font-size:.8rem;margin-bottom:1.5rem}
     .subtitle a{color:#4a9eff;text-decoration:none}
     .subtitle a:hover{text-decoration:underline}
+    .hint{color:#555;font-size:.72rem;margin-bottom:1.5rem;padding:.4rem .7rem;background:#0f1115;border:1px solid #1e1e2a;border-radius:6px}
     .card{background:#141414;border:1px solid #252525;border-radius:10px;padding:1.25rem;margin-bottom:1rem}
     .card-title{font-size:.85rem;color:#999;margin-bottom:.75rem;font-weight:500}
     label{display:block;font-size:.78rem;color:#888;margin-bottom:.3rem}
@@ -59,6 +60,7 @@ export function renderDemoPage(): string {
       <span class="badge">v1.0</span>
     </div>
     <p class="subtitle">OpenAI 兼容 API · 基于 <a href="https://chatjimmy.ai" target="_blank">ChatJimmy</a></p>
+    <p class="hint">无需 API Key — 如客户端要求填写密钥，随意输入任意字符串即可</p>
 
     <div class="card">
       <div class="card-title">接口端点</div>
@@ -246,6 +248,16 @@ console.log(data.choices[0].message.content);</div>
       }
       btn.disabled=false;
     }
+    (function(){
+      var origin=window.location.origin;
+      document.querySelectorAll('.code-block').forEach(function(el){
+        el.childNodes.forEach(function(node){
+          if(node.nodeType===3){
+            node.textContent=node.textContent.replace(/https:\/\/your-domain/g,origin);
+          }
+        });
+      });
+    })();
   </script>
 </body>
 </html>`;
