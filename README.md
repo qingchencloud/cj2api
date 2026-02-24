@@ -25,6 +25,7 @@
 git clone https://github.com/qingchencloud/cj2api.git
 cd cj2api
 npm install
+npx wrangler login    # 首次使用需登录 Cloudflare
 npm run deploy
 ```
 
@@ -33,10 +34,13 @@ npm run deploy
 ```bash
 npm install @qingchencloud/cj2api
 cd node_modules/@qingchencloud/cj2api
+npx wrangler login    # 首次使用需登录 Cloudflare
 npm run deploy
 ```
 
 部署完成后，Wrangler 会输出你的 Worker URL，形如 `https://cj2api.<你的子域>.workers.dev`。
+
+> **国内访问提示：** `*.workers.dev` 域名在国内需要科学上网。如果你有托管在 Cloudflare 的域名，可以在 Dashboard → Workers → cj2api → Settings → Domains & Routes 中绑定自定义域名，走 CDN 国内可直连。
 
 > **提示：** 如客户端要求填写 API Key，随意输入任意字符串即可。
 
