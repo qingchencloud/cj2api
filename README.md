@@ -2,7 +2,7 @@
 
 将 [ChatJimmy](https://chatjimmy.ai) 转换为 OpenAI 兼容 API 的 Cloudflare Worker。
 
-一键部署到 Cloudflare Workers，即可获得标准的 `/v1/chat/completions` 接口，兼容所有支持 OpenAI API 的客户端和框架。
+一键部署到 Cloudflare Workers，即可获得标准的 `/v1/chat/completions` 接口，兼容所有支持 OpenAI API 的客户端和框架。无需 API Key。
 
 ## 特性
 
@@ -12,94 +12,33 @@
 - **Token 统计** — 响应中包含 `usage` 字段，测试页实时显示输出速度
 - **极简代码** — 纯 TypeScript，无任何第三方运行时依赖
 
-## 工作原理
-
-```
-客户端 (OpenAI SDK / curl / 任意 HTTP)
-  │
-  │  POST /v1/chat/completions
-  │  标准 OpenAI 请求格式
-  ▼
-┌─────────────────────────┐
-│   Cloudflare Worker      │
-│                         │
-│  1. 解析请求体           │
-│  2. 提取 system 消息     │
-│  3. 转换为上游格式       │
-│  4. 转发到 ChatJimmy     │
-│  5. 解析响应 + stats     │
-│  6. 封装为 OpenAI 格式   │
-└─────────────────────────┘
-  │
-  │  ChatJimmy 私有协议
-  ▼
-┌─────────────────────────┐
-│   chatjimmy.ai/api/chat │
-│   返回纯文本 + stats 块  │
-└─────────────────────────┘
-```
-
-### 协议转换细节
-
-**请求转换：** 客户端发送标准 OpenAI 格式，Worker 将其转换为 ChatJimmy 的私有格式：
-
-- `messages` 中的 `system` 角色消息被提取为 `chatOptions.systemPrompt`
-- `model` 映射到 `chatOptions.selectedModel`
-- `top_k` 映射到 `chatOptions.topK`
-
-**响应解析：** ChatJimmy 返回纯文本，末尾附带统计块：
-
-```
-这是回复内容...<|stats|>{"prefill_tokens":12,"decode_tokens":85,"total_tokens":97}<|/stats|>
-```
-
-Worker 解析出内容和统计信息，封装为标准 OpenAI 响应格式。
-
-**模拟流式输出：** 上游不支持真正的 SSE 流式，Worker 采用"伪流式"策略 — 先获取完整响应，再将内容按自然断点（空格、标点、换行）拆分为小块，逐块以 SSE `data:` 事件推送给客户端。
-
-## 安装
-
-### 从 npm 安装
-
-```bash
-npm install @qingchencloud/cj2api
-```
-
-安装后项目文件位于 `node_modules/@qingchencloud/cj2api/`，可直接用 `wrangler deploy` 部署。
-
-### 从 GitHub 克隆
-
-```bash
-git clone https://github.com/qingchencloud/cj2api.git
-cd cj2api
-npm install
-```
-
-## 快速部署
+## 快速开始
 
 ### 前置条件
 
 - [Node.js](https://nodejs.org/) 18+
 - [Cloudflare 账号](https://dash.cloudflare.com/sign-up)（免费即可）
 
-### 步骤
+### 方式一：从 GitHub 克隆（推荐）
 
 ```bash
-# 克隆仓库
 git clone https://github.com/qingchencloud/cj2api.git
 cd cj2api
-
-# 安装依赖
 npm install
+npm run deploy
+```
 
-# 本地开发
-npm run dev
+### 方式二：从 npm 安装
 
-# 部署到 Cloudflare Workers
+```bash
+npm install @qingchencloud/cj2api
+cd node_modules/@qingchencloud/cj2api
 npm run deploy
 ```
 
 部署完成后，Wrangler 会输出你的 Worker URL，形如 `https://cj2api.<你的子域>.workers.dev`。
+
+> **提示：** 如客户端要求填写 API Key，随意输入任意字符串即可。
 
 ## API 接口
 
@@ -226,7 +165,7 @@ console.log(data.choices[0].message.content);
 
 ### OpenAI SDK（Python）
 
-由于完全兼容 OpenAI API 格式，可以直接使用官方 SDK：
+完全兼容 OpenAI API 格式，可以直接使用官方 SDK：
 
 ```python
 from openai import OpenAI
@@ -242,6 +181,79 @@ response = client.chat.completions.create(
 )
 print(response.choices[0].message.content)
 ```
+
+## 本地开发
+
+```bash
+git clone https://github.com/qingchencloud/cj2api.git
+cd cj2api
+npm install
+npm run dev
+# 默认监听 http://localhost:8787
+```
+
+本地开发时，可以搭配 [cftunnel](https://github.com/qingchencloud/cftunnel) 将本地服务暴露到公网，方便远程调试或分享给他人测试：
+
+```bash
+# 另开终端，生成临时公网地址
+cftunnel quick 8787
+# 输出类似: https://xxx-xxx-xxx.trycloudflare.com
+```
+
+如需绑定自有域名：
+
+```bash
+cftunnel init
+cftunnel create my-api
+cftunnel add api 8787 --domain api.example.com
+cftunnel up
+# 通过 https://api.example.com/v1/chat/completions 稳定访问
+```
+
+## 工作原理
+
+```
+客户端 (OpenAI SDK / curl / 任意 HTTP)
+  │
+  │  POST /v1/chat/completions
+  │  标准 OpenAI 请求格式
+  ▼
+┌─────────────────────────┐
+│   Cloudflare Worker      │
+│                         │
+│  1. 解析请求体           │
+│  2. 提取 system 消息     │
+│  3. 转换为上游格式       │
+│  4. 转发到 ChatJimmy     │
+│  5. 解析响应 + stats     │
+│  6. 封装为 OpenAI 格式   │
+└─────────────────────────┘
+  │
+  │  ChatJimmy 私有协议
+  ▼
+┌─────────────────────────┐
+│   chatjimmy.ai/api/chat │
+│   返回纯文本 + stats 块  │
+└─────────────────────────┘
+```
+
+### 协议转换细节
+
+**请求转换：** 客户端发送标准 OpenAI 格式，Worker 将其转换为 ChatJimmy 的私有格式：
+
+- `messages` 中的 `system` 角色消息被提取为 `chatOptions.systemPrompt`
+- `model` 映射到 `chatOptions.selectedModel`
+- `top_k` 映射到 `chatOptions.topK`
+
+**响应解析：** ChatJimmy 返回纯文本，末尾附带统计块：
+
+```
+这是回复内容...<|stats|>{"prefill_tokens":12,"decode_tokens":85,"total_tokens":97}<|/stats|>
+```
+
+Worker 解析出内容和统计信息，封装为标准 OpenAI 响应格式。
+
+**模拟流式输出：** 上游不支持真正的 SSE 流式，Worker 采用"伪流式"策略 — 先获取完整响应，再将内容按自然断点（空格、标点、换行）拆分为小块，逐块以 SSE `data:` 事件推送给客户端。
 
 ## 项目结构
 
@@ -265,35 +277,6 @@ cj2api/
 ├── package.json
 └── README.md
 ```
-
-## 搭配 cftunnel 使用
-
-本地开发时，可以搭配 [cftunnel](https://github.com/qingchencloud/cftunnel) 将本地服务暴露到公网，方便远程调试或分享给他人测试。
-
-### 快速体验（临时公网地址）
-
-```bash
-# 启动本地开发服务器
-npm run dev
-# 默认监听 http://localhost:8787
-
-# 另开终端，用 cftunnel 生成临时公网地址
-cftunnel quick 8787
-# 输出类似: https://xxx-xxx-xxx.trycloudflare.com
-```
-
-拿到公网地址后，直接替换示例中的 `https://your-domain` 即可调用。
-
-### 绑定自有域名（持久化）
-
-```bash
-cftunnel init
-cftunnel create my-api
-cftunnel add api 8787 --domain api.example.com
-cftunnel up
-```
-
-这样你的 API 就可以通过 `https://api.example.com/v1/chat/completions` 稳定访问了。
 
 ## Claude Code Skills
 
