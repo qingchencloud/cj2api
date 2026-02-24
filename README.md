@@ -243,6 +243,46 @@ cj2api/
 └── README.md
 ```
 
+## 搭配 cftunnel 使用
+
+本地开发时，可以搭配 [cftunnel](https://github.com/qingchencloud/cftunnel) 将本地服务暴露到公网，方便远程调试或分享给他人测试。
+
+### 快速体验（临时公网地址）
+
+```bash
+# 启动本地开发服务器
+npm run dev
+# 默认监听 http://localhost:8787
+
+# 另开终端，用 cftunnel 生成临时公网地址
+cftunnel quick 8787
+# 输出类似: https://xxx-xxx-xxx.trycloudflare.com
+```
+
+拿到公网地址后，直接替换示例中的 `https://your-domain` 即可调用。
+
+### 绑定自有域名（持久化）
+
+```bash
+cftunnel init
+cftunnel create my-api
+cftunnel add api 8787 --domain api.example.com
+cftunnel up
+```
+
+这样你的 API 就可以通过 `https://api.example.com/v1/chat/completions` 稳定访问了。
+
+## 免责声明
+
+本项目仅供**学习研究和技术测试**使用，请勿用于任何商业用途。
+
+- 本项目是对 [ChatJimmy](https://chatjimmy.ai) 公开接口的协议转换封装，不提供任何模型能力本身
+- 使用者应遵守 ChatJimmy 的服务条款和使用政策
+- 请勿将本项目用于大规模请求、自动化爬取或任何可能对上游服务造成负担的行为
+- 上游服务的可用性、响应质量和模型能力均由 ChatJimmy 提供，与本项目无关
+- 作者不对因使用本项目产生的任何直接或间接损失承担责任
+- 如上游服务条款发生变更导致本项目不可用，作者不承担任何义务
+
 ## License
 
 [MIT](LICENSE) © QingChen Cloud
