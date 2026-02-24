@@ -1,6 +1,6 @@
 {
   "name": "@qingchencloud/cj2api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "将 ChatJimmy 转换为 OpenAI 兼容 API 的 Cloudflare Worker",
   "repository": {
     "type": "git",
