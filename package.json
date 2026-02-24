@@ -1,0 +1,22 @@
+{
+  "name": "cj2api",
+  "version": "1.0.0",
+  "description": "将 ChatJimmy 转换为 OpenAI 兼容 API 的 Cloudflare Worker",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qingchencloud/cj2api.git"
+  },
+  "license": "MIT",
+  "author": "QingChen Cloud",
+  "keywords": ["openai", "api", "cloudflare-workers", "chatjimmy", "proxy"],
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241218.0",
+    "typescript": "^5.7.0",
+    "wrangler": "^3.99.0"
+  }
+}
