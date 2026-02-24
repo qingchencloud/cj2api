@@ -57,6 +57,24 @@ Worker 解析出内容和统计信息，封装为标准 OpenAI 响应格式。
 
 **模拟流式输出：** 上游不支持真正的 SSE 流式，Worker 采用"伪流式"策略 — 先获取完整响应，再将内容按自然断点（空格、标点、换行）拆分为小块，逐块以 SSE `data:` 事件推送给客户端。
 
+## 安装
+
+### 从 npm 安装
+
+```bash
+npm install @qingchencloud/cj2api
+```
+
+安装后项目文件位于 `node_modules/@qingchencloud/cj2api/`，可直接用 `wrangler deploy` 部署。
+
+### 从 GitHub 克隆
+
+```bash
+git clone https://github.com/qingchencloud/cj2api.git
+cd cj2api
+npm install
+```
+
 ## 快速部署
 
 ### 前置条件
@@ -237,6 +255,11 @@ cj2api/
 │   ├── page.ts         # 内置测试页面
 │   ├── types.ts        # TypeScript 类型定义
 │   └── utils.ts        # 工具函数（ID生成、响应解析等）
+├── .claude/
+│   └── skills/         # Claude Code 维护 Skills
+│       ├── release.md      # 发版流程
+│       ├── deploy.md       # 部署流程
+│       └── update-page.md  # 测试页面维护
 ├── wrangler.toml       # Cloudflare Workers 配置
 ├── tsconfig.json       # TypeScript 配置
 ├── package.json
@@ -271,6 +294,18 @@ cftunnel up
 ```
 
 这样你的 API 就可以通过 `https://api.example.com/v1/chat/completions` 稳定访问了。
+
+## Claude Code Skills
+
+本项目内置了 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 维护 Skills，方便开发者通过 AI 辅助进行项目维护：
+
+| Skill | 说明 |
+|-------|------|
+| `/release` | 版本发布：bump 版本号 → npm publish → git tag → push |
+| `/deploy` | 部署到 Cloudflare Workers |
+| `/update-page` | 维护内置测试页面（page.ts） |
+
+在 Claude Code 中打开本项目目录，输入对应 Skill 名称即可使用。
 
 ## 免责声明
 

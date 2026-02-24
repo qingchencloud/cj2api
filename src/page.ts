@@ -37,7 +37,7 @@ export function renderDemoPage(): string {
     .btn-sm:hover{background:#252525;color:#fff}
     .endpoint{background:#111118;border:1px solid #1e1e30;border-radius:6px;padding:.45rem .7rem;font-family:"SF Mono",Monaco,Consolas,monospace;font-size:.78rem;color:#7aa2f7;margin-bottom:.4rem;display:flex;justify-content:space-between;align-items:center}
     .endpoint .method{color:#4ade80;margin-right:.5rem}
-    #output{background:#0c0c0c;border:1px solid #252525;border-radius:8px;padding:1rem;min-height:50px;white-space:pre-wrap;word-break:break-word;font-size:.82rem;line-height:1.65;color:#ccc}
+    #output{background:#0c0c0c;border:1px solid #252525;border-radius:8px;padding:1rem;min-height:50px;max-height:400px;overflow-y:auto;white-space:pre-wrap;word-break:break-word;font-size:.82rem;line-height:1.65;color:#ccc}
     .stats-bar{display:flex;gap:1rem;flex-wrap:wrap;padding:.6rem .8rem;background:#0c0c0c;border:1px solid #252525;border-top:none;border-radius:0 0 8px 8px;font-size:.72rem;color:#666}
     .stats-bar .stat{display:flex;align-items:center;gap:.3rem}
     .stats-bar .val{color:#4ade80;font-family:monospace}
