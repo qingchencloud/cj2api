@@ -251,11 +251,7 @@ console.log(data.choices[0].message.content);</div>
     (function(){
       var origin=window.location.origin;
       document.querySelectorAll('.code-block').forEach(function(el){
-        el.childNodes.forEach(function(node){
-          if(node.nodeType===3){
-            node.textContent=node.textContent.replace(/https:\/\/your-domain/g,origin);
-          }
-        });
+        el.innerHTML=el.innerHTML.replace(/https:\/\/your-domain/g,origin);
       });
     })();
   </script>
