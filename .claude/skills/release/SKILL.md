@@ -1,3 +1,12 @@
+---
+name: release
+description: 版本发布：bump 版本号 → npm publish → git tag → push
+license: MIT
+metadata:
+  version: "1.0.0"
+  author: QingChen Cloud
+  tags: ["npm", "release", "publish"]
+---
 # 发版 Release
 
 发布新版本到 npm 并推送到 GitHub。

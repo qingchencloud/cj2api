@@ -1,3 +1,12 @@
+---
+name: deploy
+description: 部署到 Cloudflare Workers
+license: MIT
+metadata:
+  version: "1.0.0"
+  author: QingChen Cloud
+  tags: ["cloudflare", "workers", "deploy"]
+---
 # 部署 Deploy
 
 部署到 Cloudflare Workers。

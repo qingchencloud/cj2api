@@ -268,10 +268,10 @@ cj2api/
 │   ├── types.ts        # TypeScript 类型定义
 │   └── utils.ts        # 工具函数（ID生成、响应解析等）
 ├── .claude/
-│   └── skills/         # Claude Code 维护 Skills
-│       ├── release.md      # 发版流程
-│       ├── deploy.md       # 部署流程
-│       └── update-page.md  # 测试页面维护
+│   └── skills/             # Claude Code 维护 Skills
+│       ├── release/SKILL.md    # 发版流程
+│       ├── deploy/SKILL.md     # 部署流程
+│       └── update-page/SKILL.md # 测试页面维护
 ├── wrangler.toml       # Cloudflare Workers 配置
 ├── tsconfig.json       # TypeScript 配置
 ├── package.json

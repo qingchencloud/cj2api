@@ -1,3 +1,12 @@
+---
+name: update-page
+description: 维护内置测试页面（page.ts）
+license: MIT
+metadata:
+  version: "1.0.0"
+  author: QingChen Cloud
+  tags: ["frontend", "page", "ui"]
+---
 # 更新测试页面 Update Page
 
 修改内置测试页面（src/page.ts）。
